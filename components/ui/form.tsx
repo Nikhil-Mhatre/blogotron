@@ -10,6 +10,8 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
+import { useFormStatus } from 'react-dom'
 import { toast } from 'sonner'
 
 export default function Form() {
@@ -43,17 +45,25 @@ export default function Form() {
               placeholder='What should I write about?'
               className='rounded-lg'
             />
-            <Button
-              size='sm'
-              type='submit'
-              variant='default'
-              className='mt-3 w-full rounded-lg'
-            >
-              Submit
-            </Button>
+            <SubmitButton />
           </form>
         </CardContent>
       </Card>
     </section>
+  )
+}
+
+function SubmitButton() {
+  const { pending } = useFormStatus()
+
+  return (
+    <Button
+      size='sm'
+      type='submit'
+      variant='default'
+      className={cn('mt-3 w-full rounded-lg', pending && 'animate-pulse')}
+    >
+      {pending ? 'Working on it...' : 'Submit'}
+    </Button>
   )
 }
