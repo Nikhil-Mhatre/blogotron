@@ -14,7 +14,7 @@ import { toast } from 'sonner'
 
 export default function Form() {
   async function action(formData: FormData) {
-    const prompt = formData.get('name')
+    const prompt = formData.get('prompt')
 
     // show a toast notification if input is empty
     if (!prompt) {
