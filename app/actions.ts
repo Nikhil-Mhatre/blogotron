@@ -51,7 +51,7 @@ import { redirect } from 'next/navigation'
 //   if (error) return { error: 'Unable to upload the blog image to Storage.' }
 
 //   const path = data?.path
-//   const imageUrl = `${process.env.SUPABASE_URL}/storage/v1/object/public/blogs${path}`
+//   const imageUrl = `${process.env.SUPABASE_URL}/storage/v1/object/public/blogs/${path}`
 
 //   // create a new blog post in supabase
 //   const { data: blog, error: blogError } = await supabase
