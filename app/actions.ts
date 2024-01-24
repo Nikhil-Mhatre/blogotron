@@ -5,12 +5,17 @@ import { decode } from 'base64-arraybuffer'
 import { supabase } from '@/lib/supabase'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { auth } from '@clerk/nextjs'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 export async function createCompletion(prompt: string) {
+  const { userId } = auth()
   if (!prompt) {
     return { error: 'Prompt is required.' }
+  }
+  if(!userId){
+    return {error: 'User is not logged In'}
   }
 
   // generate blog post using openai
@@ -32,7 +37,7 @@ export async function createCompletion(prompt: string) {
   // generate an image using openai
   const response = await openai.images.generate({
     model: 'dall-e-2',
-    prompt: `Generate an image for a blog post about "${prompt}"`,
+    prompt: `Generate an image for a blog post about "${prompt}" in english`,
     n: 1,
     size: '1024x1024',
     response_format: 'b64_json'
@@ -56,7 +61,7 @@ export async function createCompletion(prompt: string) {
   // create a new blog post in supabase
   const { data: blog, error: blogError } = await supabase
     .from('blogs')
-    .insert([{ title: prompt, content, imageUrl, userId: '123' }])
+    .insert([{ title: prompt, content, imageUrl, userId}])
     .select()
   if (blogError) {
     return { error: 'Unable to insert the blog into the database.' }
