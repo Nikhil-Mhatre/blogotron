@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { useFormStatus } from 'react-dom'
 import { toast } from 'sonner'
+import { SignInButton, SignedIn, SignedOut } from '@clerk/nextjs'
 
 export default function Form() {
   async function action(formData: FormData) {
@@ -35,7 +36,7 @@ export default function Form() {
     <section className='mx-auto max-w-lg'>
       <Card className='border-0 shadow-none'>
         <CardHeader className='text-center'>
-          <CardTitle>Unleash the Power of AI Blogging</CardTitle>
+          <CardTitle>Next AI Blogger</CardTitle>
           <CardDescription>Generate a blog post about anything</CardDescription>
         </CardHeader>
         <CardContent>
@@ -57,13 +58,29 @@ function SubmitButton() {
   const { pending } = useFormStatus()
 
   return (
-    <Button
-      size='sm'
-      type='submit'
-      variant='default'
-      className={cn('mt-3 w-full rounded-lg', pending && 'animate-pulse')}
-    >
-      {pending ? 'Working on it...' : 'Submit'}
-    </Button>
+    <>
+      <SignedIn>
+        <Button
+          size='sm'
+          type='submit'
+          className={cn('mt-3 w-full rounded-lg', pending && 'animate-pulse')}
+        >
+          {pending ? 'Working on it...' : 'Submit'}
+        </Button>
+      </SignedIn>
+
+      <SignedOut>
+        <SignInButton mode='modal'>
+          <Button
+            size='sm'
+            type='button'
+            variant='secondary'
+            className='mt-3 w-full rounded-lg'
+          >
+            Sign in to start
+          </Button>
+        </SignInButton>
+      </SignedOut>
+    </>
   )
 }
